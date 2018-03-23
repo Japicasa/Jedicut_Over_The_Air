@@ -130,9 +130,17 @@ My recommendation would be starting with these values, if successsful then reduc
 Apart of the parameters above to configure the Server you also must review the name  and password of the "private" wifi the server will generate, And if you want to play deeply with the performance of the system maybe you want to change the buffer size and the margin to send a overflow to the client.
 
 # The Software Configuration Client side
- In my table and computer I found that the client loop was dome much much faster than the throughtput of the USB adaptor and/or Jedicut .dll performance so I found that a "hearing period" had to be placed to allow the buffer from the USB had sensible data to be sent thru wifi, wifi packets are some 1000 bytes big and they also take some time to pack then so you want a level of incoming bytes to have an efficient data throughput. This is managed by the following parameters.
+ In my table and computer I found that the client loop was done much much faster than the throughtput of the USB adaptor and/or Jedicut .dll performance so I found that a "hearing period" had to be placed to allow the buffer from the USB had sensible data to be sent thru wifi, wifi packets are some 1000 bytes big and they also take some time to pack then so you want a level of incoming bytes to have an efficient data throughput. This is managed by the following parameters.
  clientpacksize=250;                                  
- delay2receive=14500;  
+ delay2receive=14500;  (microseconds)
+ 
+ On the other I didnot want "the whole" cut went in a go thru the wifi and lose the Pause/Continue command from Jedicut cut screen I found it useful sometimes, so you do not want very much cutting info is stored in the line.
+ There is a trade off In between Pack size, and listening window and Server´s buffersize that one has to feel confrtible with.
+ The actual speeds also will play a role in this trade since they really are how fast the buffer drains. It will take some time to get convinced this set of parameters is good enough,
+ 
+ The ones here were the one I did choose, and again my recommendation is starting with slow speed will let you get initial seccess and the go improving..
+ 
+ If you need some debug info the serial port of the Server is available so you can write to it strategic info you may need.
  
 Never forget tomake sure the wifie ssid and password are the same as the Server.
 And finally if after tunning you table successfully  you install your CNC board in a somehow difficult access area, I have extented the funtion handle command so you can pass to the server (remote) the changes in fast and cut spped by
