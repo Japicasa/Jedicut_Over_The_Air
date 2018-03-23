@@ -126,3 +126,22 @@ These values were acceptable with my old 32bit AMD proccesor bur period could be
 One of the impresive features of ESP8266 chip is it has got a clock speed of 80MHz (and 4MB Flash Memory) versus the ATmega Arduinos which are in the range of 16MHz of the Nano, so I have not seen a Nano running this SW but it would be slower indeed.
 
 My recommendation would be starting with these values, if successsful then reduce stepmin_period until acceptable values to have a wider range of speeds and then make a choice of your favourite values. If not successful double these values and try again.
+
+Apart of the parameters above to configure the Server you also must review the name  and password of the "private" wifi the server will generate, And if you want to play deeply with the performance of the system maybe you want to change the buffer size and the margin to send a overflow to the client.
+
+# The Software Configuration Client side
+ In my table and computer I found that the client loop was dome much much faster than the throughtput of the USB adaptor and/or Jedicut .dll performance so I found that a "hearing period" had to be placed to allow the buffer from the USB had sensible data to be sent thru wifi, wifi packets are some 1000 bytes big and they also take some time to pack then so you want a level of incoming bytes to have an efficient data throughput. This is managed by the following parameters.
+ clientpacksize=250;                                  
+ delay2receive=14500;  
+ 
+Never forget tomake sure the wifie ssid and password are the same as the Server.
+And finally if after tunning you table successfully  you install your CNC board in a somehow difficult access area, I have extented the funtion handle command so you can pass to the server (remote) the changes in fast and cut spped by
+setting send_speed= true; 
+
+Then the client will send to the client a new set of "stepmin_period" and "stepmax_period " the fast and cut speeds parameters.
+
+ # The future
+Client really has much proccessing time available, It will be relatively easy to implement a "heat control" from it but I think the very best opportunity is really to generate a new .dll which directs Jedicut to a wifi directly. This is something I feel is beyond my reach by the moment but i leave this challenge open and offer my support for one brave that decides to attempt.
+
+
+
