@@ -3,11 +3,11 @@ Jedicut Extension; Client -Server arduinos for wireless CNC board control
 
 Jedicut is a famous "FREE" CNC cutting SW developed By Jerome: https://www.jedicut.com/
 
-This SW is an extension pluging to use Jedicut with SerialUSB.dll and an Arduino ESP8266
+This SW is an extension pluging to use Jedicut with SerialUSB.dll and TWO Arduino ESP8266
 It uses TWO arduino compatible ESP8266, here we used D1-minis. One connected to the Computer USB port: The Client. 
-The other connected into the CNC control board The Server. The Server generateacts as a Secure wifi AP where the client connects.
-When Jedicut sends data thru USB the client receives them and relays them thu a TCP-IP socket into the Server which then comands the CNC table.
-Useful in case tha access to your table is complicated or if you want to use a computer not near the table, within wifi range.
+The other connected into the CNC control board The Server. The Server acts as a Secure wifi AP where the client connects.
+When Jedicut sends data thru USB the client receives them and relays them thru a TCP-IP socket into the Server which then comands the CNC table.
+Useful in case that access to your table is complicated or if you want to use a computer not near the table, within wifi range.
 
 Next step will be to write a new .dll for Jedicut that removes the need of a Client Arduino being the PC the client for the board controller.
 
@@ -17,13 +17,16 @@ Hardware requirements
 You will need a Personal computer, a CNC Foam Cutting Table, a suitable to your table stepper motor controller board and the Jedicut software. See: https://www.jedicut.com/
 
 where a lot of advise can be found on this. Note there is a English version in this page. Since most modern computers do not feature an LPT parallel port, the native interface for Jedicut and the controller board, several alternatives have been developed successfully to use different boards and in particular the universally accepted USB port of most of computers nowadays. See Jedicut extensions: https://github.com/jedicut/jedicut-devices-extensions The extension I used was the USBSerial.dll as the Jedicut extension. By Using it Jedicut will output to a Serial port the stream of comands for controlling the board and then the table movements.
-Jedicut Configuration
+
+# Jedicut Configuration
 
 The folowing paragraph aply to my own table configuration and pinout and most of them. Obviously you will need to acomodate to your board and table peculiars.
 
 Make sure you have in the same folder as Jedicut commport.ini https://github.com/jedicut/jedicut-devices-extensions/blob/master/USBSerial/comport.ini or USBSerial.dll will not know which com port to use
 
-Jedicut/Tools/Comunication: First Select "USBSerial.dll" as 'Comunication Mode'.
+# Jedicut/Tools/Comunication: 
+
+First Select "USBSerial.dll" as 'Comunication Mode'.
 
 Parallel Port configuration is to be set to the following: NO MATER WHAT PINOUT your table has.
 
@@ -50,7 +53,7 @@ This is because Jedicut is just transmiting this commands over the Serial and it
 
 The rest of parameters in this configuration page can be ignored.
 
-Jedicut/Tools/CNC:
+# Jedicut/Tools/CNC:
 
 -Set the mm per step of your motors, mine are 0,000625 mm/step, that equals 1600 steps per mm (or turn in my case since I use a M6 threaded bar as spindle screw).
 
@@ -71,38 +74,44 @@ Then you need one or two WeMos D1-mini or equivalent ESP8266 based board.
 
 https://es.aliexpress.com/store/product/D1-mini-Mini-NodeMcu-4M-bytes-Lua-WIFI-Internet-of-Things-development-board-based-ESP8266/1331105_32529101036.html?spm=a219c.12010612.0.0.3d8e6607QP3g1u
 
-First the pinout for controlling the board
+# First the pinout for controlling the board, Server side,
+  
+Function Number        Arduino Pin            TB6560 SubD25 pin 
+in jedicut
+configuration 
+(fixed !!) 
 
-Function Number in jedicut Arduino Pin e.g. TB6560 SubD25 pin configuration (fixed !!) MotorX1 Clock 2 D1 -- wire to --> 16
+MotorX1 Clock 2            D1     -- wire to -->    16
 
-MotorX2 Clock 3 D2 -- wire to --> 9
+MotorX2 Clock 3            D2     -- wire to -->    9
 
-MotorY1 Clock 4 D3 -- wire to --> 14
+MotorY1 Clock 4            D3     -- wire to -->    14
 
-MotorY2 Clock 5 D4 -- wire to --> 3
+MotorY2 Clock 5            D4     -- wire to -->    3
 
-MotorX1 Direction 6 D5 -- wire to --> 1
+MotorX1 Direction 6        D5     -- wire to -->    1
 
-MotorX2 Direction 7 D6 -- wire to --> 8
+MotorX2 Direction 7        D6     -- wire to -->    8
 
-MotorY1 Direction 8 D7 -- wire to --> 7
+MotorY1 Direction 8        D7     -- wire to -->    7
 
-MotorY2 Direction 9 D8 -- wire to --> 6
+MotorY2 Direction 9        D8     -- wire to -->    6
 
-All Engines On/Off - D0 -- wire to --> 17; 4 and 5
+All Engines On/Off -       D0     -- wire to -->    17; 4 and 5
 
-Heating On/off - N/A
+Heating On/off -           N/A
 
-Heating PWM - N/A
+Heating PWM -              N/A
 
-+5V -> 5V -- wire to --> SubD 15 Pin 15
++5V ->                     5V     -- wire to -->   SubD 15 Pin 15
 
-Ground -> G -- wire to --> SubD 15 Pin 14
+Ground ->                   G     -- wire to -->   SubD 15 Pin 14
 
-The Arduino configuration and pinout are at the right part of the table, this is the configuration I made to work but will depend of your actual wiring. Important here: You have to join the ground of the arduino and the CNC board, at least, the +5V is for the wireless version only.
+The Arduino configuration and pinout are at the right part of the table, this is the configuration I made to work but will depend of your actual wiring. Important here: You have to join the ground of the arduino and the CNC board, the +5V is for the power supply of the server.
 
 Also you have to be aware that ESP8266 and the D1-mini as well is a 3,3V chip so its output '1' will be 3,3V very most of boards will interpet this as a genuine '1' if you experience problems you can install a logic level shifter chip (0,5Eur) but I do not recommend those as a startpoint.
-The Software Configuration
+
+# The Software Configuration Server side
 
 The code is reasonabily commented you will have to tune the parameters below to suit your table and computer performance.
 
