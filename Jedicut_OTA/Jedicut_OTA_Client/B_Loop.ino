@@ -1,0 +1,5 @@
+/////////////////////////////////////////////////////
+void loop() {
+readusbbuffer();
+send_buffer_to_wifi(); 
+}
